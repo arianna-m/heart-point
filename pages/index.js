@@ -37,7 +37,7 @@ export default function Home({ posts }) {
       color: "green",
       message: "I will get back to you as soon as possible"
     })
-    submitForm.setvalues({
+    submitForm.setValues({
       email: '',
       event: '',
       points: '',

@@ -11,11 +11,18 @@ export default async function handler(req, res){
     const request = await fetch('https://api.airtable.com/v0/appq2MoOMk1aytFqQ/2022-23', {
         method: 'POST',
         headers: {
-            Authorization: `Bearer ${process.env.AIRTABLE_KEY}`,
+            Authorization: `Bearer ${process.env.AIRTABLE_API_KEY}`,
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({fields: {email, event, points}})
-    });
+        body: JSON.stringify(
+            {records: [
+                {
+                    fields: {email: email, event: event, points: points}
+                }
+            ] })
+        }
+     );
+
     if(request.ok){
         return res.status(200).json({data: "ok"});
     }
