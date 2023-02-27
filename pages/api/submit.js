@@ -1,31 +1,18 @@
+const AirtablePlus = require("airtable-plus")
+
+const airtable = new AirtablePlus({
+    baseID: 'appq2MoOMk1aytFqQ',
+    apiKey: process.env.AIRTABLE_API_KEY,
+    tableName: "2022-23"
+})
+
 export default async function handler(req, res){
     const {email, event, points} = req.query;
 
-    if( !email || !event || !points) {
-        return res.status(400).json({error: "Missing Fields"})
+    if (email && event && points) {
+        const record = await airtable.create({ name: 'Arianna Martinelli', email: email, event: event, points: parseInt(points) });
+        res.status(200).send(`Created record ${record.id}`)
+    } else {
+        res.status(400).send(`Couldn't create record.`)
     }
-    if(req.method != "GET") {
-        return res.status.json({error: "Method not allowed"})
-    }
-
-    const request = await fetch('https://api.airtable.com/v0/appq2MoOMk1aytFqQ/2022-23', {
-        method: 'GET',
-        headers: {
-            Authorization: `Bearer ${process.env.AIRTABLE_API_KEY}`,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(
-            {records: [
-                {
-                    fields: {email: email, event: event, points: points}
-                }
-            ] })
-        }
-     );
-
-    if(request.ok){
-        return res.status(200).json({data: "ok"});
-    }
-    return res.status(400).json({error: "error returned"})
-
 }
