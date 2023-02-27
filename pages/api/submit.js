@@ -1,15 +1,15 @@
 export default async function handler(req, res){
-    const {email, event, points} = JSON.parse(req.body);
+    const {email, event, points} = req.query;
 
     if( !email || !event || !points) {
         return res.status(400).json({error: "Missing Fields"})
     }
-    if(req.method != "POST") {
+    if(req.method != "GET") {
         return res.status.json({error: "Method not allowed"})
     }
 
     const request = await fetch('https://api.airtable.com/v0/appq2MoOMk1aytFqQ/2022-23', {
-        method: 'POST',
+        method: 'GET',
         headers: {
             Authorization: `Bearer ${process.env.AIRTABLE_API_KEY}`,
             'Content-Type': 'application/json'

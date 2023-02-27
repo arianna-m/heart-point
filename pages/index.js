@@ -18,10 +18,9 @@ export default function Home({ posts }) {
     }
   });
   const handleSubmit = async values => {
-    const request = await fetch('/api/submit',{
-      method: 'POST',
-      body: JSON.stringify(values)
-    });
+    const request = await fetch(`/api/submit?email=${values.email}&event=${values.event}&points=${values.points}`,
+    ).then (r => alert(JSON.stringify(r)));
+    console.log(request);
     const result = await request.json();
 
     if(result.data != 'ok'){
@@ -58,7 +57,7 @@ export default function Home({ posts }) {
               <TextInput required label="Event Name" placeholder="Event Name" {...submitForm.getInputProps('event')}/>
               <TextInput required label="# of Points" placeholder="25" {...submitForm.getInputProps('points')}/>
               <Group position="center" mt="md">
-                <Button type="submit">Submit</Button>
+                <Button type="submit" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Submit</Button>
               </Group>
             </form>
           </Box>
