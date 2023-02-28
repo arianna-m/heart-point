@@ -5,7 +5,7 @@ import useSWR from 'swr'
 import fetcher from 'lib/fetcher.js'
 
 export default function Home({ posts }) {
-  const data = useSWR('/api/all', fetcher).data;
+  const {data, isLoading} = useSWR('/api/all', fetcher);
   const submitForm = useForm({
     initialValues:{
       email: '',
@@ -13,7 +13,7 @@ export default function Home({ posts }) {
       points: '',
     },
     validate:{
-      email: value => (/^\S+@\S+$/.test(value) ? null : 'Invalid Email Address')
+      email: value => (/^\S+@\S+.\S+$/.test(value) ? null : 'Invalid Email Address')
     }
   });
   const handleSubmit = async values => {
@@ -50,7 +50,7 @@ export default function Home({ posts }) {
         <div className="p-5 min-h-screen bg-gray-100">
           <h1 className="text-2xl text-center font-bold text-gray-800 py-2">Ambassador Heart Point Tracker</h1>
           <Box mx="auto">
-            <form onSubmit={submitForm.onSubmit(values => handleSubmit(values))}>
+            <form onSubmit={submitForm.onSubmit(values => {handleSubmit(values)})}>
               <TextInput required label="Email" placeholder="youremail@student.shslou.org" {...submitForm.getInputProps('email')}/>
               <TextInput required label="Event Name" placeholder="Event Name" {...submitForm.getInputProps('event')}/>
               <TextInput required label="# of Points" placeholder="25" {...submitForm.getInputProps('points')}/>
@@ -75,6 +75,11 @@ export default function Home({ posts }) {
                           <td className="p-3 text-sm text-gray-700">{post.points}</td>
                         </tr>
                       ))}
+                      {isLoading ? <tr>
+                        <td className="p-3 text-sm text-gray-700">Loading...</td>
+                        <td className="p-3 text-sm text-gray-700"></td>
+                        <td className="p-3 text-sm text-gray-700"></td>
+                      </tr> : ''}
                       <tr className="border-t border-black font-bold">
                         <td className="p-3 text-sm text-gray-700">Total</td>
                         <td className="p-3 text-sm text-gray-700"></td>

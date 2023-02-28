@@ -10,10 +10,10 @@ const airtable = new AirtablePlus({
         delete r.id
         r.fields["id"] = id;
         return r.fields
-    }
+    },
 })
 
 export default async (_, res) => {
-    const data = await airtable.read();
+    const data = await airtable.read({sort: [{field: 'created', direction: 'asc'}],});
     res.json(data)
 }
